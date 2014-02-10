@@ -1,3 +1,8 @@
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
 /*
  * SFSU CSC 668/868 Lab
  * Post 1
@@ -19,6 +24,27 @@ public class Store {
         this.name = name;
         this.address = address;
         this.cashier = new Cashier(this);
+        
+        try {
+            this.catalog = new Product_Catalog();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            
+        }
+    }
+    
+    /**
+     * load the catalogs
+     */
+    public void loadCatalogs(){
+        try {
+            this.catalog.productReader("products.txt");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            
+        }
     }
     
     /**
@@ -52,25 +78,15 @@ public class Store {
     }
     
     /**
-     * check the database if the item is in the stock
-     * @param upc
-     * @return 
+     * @return catalog
      */
-    public boolean itemInStocks(String upc) {
-        return true;
-    }
-    
-    /**
-     * @param upc
-     * @return item price
-     * if not in stock, return 0
-     */
-    public float getItemPrice(String upc) {
-        return 0;
+    public Product_Catalog getCatalog() {
+        return this.catalog;
     }
     
     private Manager manager;
     private final Cashier cashier;
     private final String name;
     private final String address;
+    private Product_Catalog catalog;
 }

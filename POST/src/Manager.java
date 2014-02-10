@@ -17,16 +17,16 @@ public class Manager {
      * in this lab we just simply load from a text file
      */
     public void setupPost(){
-        
+        this.activeStore.loadCatalogs();
     }
     
     /**
      * open a store
      * @return store instance
      */
-    public Store openStore(){
+    public Store openStore(String name, String address){
         //open a store
-        this.activeStore = new Store("walfart", "damn address");
+        this.activeStore = new Store(name, address);
         return this.activeStore;
     }
     

@@ -18,7 +18,7 @@ public class Post {
         Manager manager = new Manager();
         
         // open a store
-        Store store = manager.openStore();
+        Store store = manager.openStore("Target","Junction 380");
         
         // set up the post
         manager.setupPost();

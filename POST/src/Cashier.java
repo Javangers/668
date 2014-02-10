@@ -44,8 +44,8 @@ public class Cashier {
             TransactionItem item = it.next();
             String upc = item.getUpc();
             
-            if(this.store.itemInStocks(upc)){
-                float price = this.store.getItemPrice(upc);
+            if(this.store.getCatalog().itemInStocks(upc)){
+                float price = this.store.getCatalog().getItemPrice(upc);
                 float subtotal = price * item.getQuantity();
                 total += subtotal;
                 

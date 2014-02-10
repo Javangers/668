@@ -1,0 +1,5 @@
+Identifying information: John
+Item: AC34 1
+Item: AC01 2
+Item: AC02 4
+Payment: CASH $999.8

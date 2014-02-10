@@ -22,6 +22,8 @@ public class Manager {
     
     /**
      * open a store
+     * @param name
+     * @param address
      * @return store instance
      */
     public Store openStore(String name, String address){

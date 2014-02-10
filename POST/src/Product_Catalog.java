@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 /**
  *
- * @author abitchue
+ * @author abeshue
  */
 
 public class Product_Catalog {

@@ -66,8 +66,7 @@ public class Store {
     }
     
     /**
-     * receive a transaction
-     * @param customer 
+     * receive a transaction 
      */
     public void receiveTransaction(){
         TransactionReader transReader = new TransactionReader(this, 

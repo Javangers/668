@@ -31,13 +31,5 @@ public class Customer {
         this.name = name;
     }
     
-    /**
-     * @return transaction file name
-     * in this lab we always use transaction.txt
-     */
-    public String getTrasactionFile() {
-        return "transaction.txt";
-    }
-    
     private String name;
 }

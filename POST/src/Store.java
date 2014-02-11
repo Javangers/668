@@ -2,6 +2,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Iterator;
 
 /*
  * SFSU CSC 668/868 Lab
@@ -68,13 +69,17 @@ public class Store {
      * receive a transaction
      * @param customer 
      */
-    public void receiveTransaction(Customer customer){
-        TransactionReader transReader = new TransactionReader(customer, this, 
-                customer.getTrasactionFile());
-        Transaction trans = transReader.getTransaction();
+    public void receiveTransaction(){
+        TransactionReader transReader = new TransactionReader(this, 
+                "transaction.txt");
         
-        // calculate the total and print the invoice
-        this.cashier.printInvoice(customer, trans);
+        Iterator<Transaction> it = transReader.getTransactionIterator();
+        
+        while(it.hasNext()) {
+            Transaction trans = it.next();
+            // calculate the total and print the invoice
+            this.cashier.printInvoice(trans);
+        }
     }
     
     /**

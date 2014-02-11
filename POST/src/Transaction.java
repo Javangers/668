@@ -15,12 +15,22 @@ import java.util.Iterator;
 public class Transaction {
     private final ArrayList<TransactionItem> items;
     private IPayment payment;
+    private final Customer customer;
     
     /**
      * Constructor
+     * @param customer
      */
-    public Transaction(){
+    public Transaction(Customer customer){
         this.items = new ArrayList<>();
+        this.customer = customer;
+    }
+    
+    /**
+     * @return customer
+     */
+    public Customer getCustomer() {
+        return this.customer;
     }
     
     /**

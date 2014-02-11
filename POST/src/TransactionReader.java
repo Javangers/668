@@ -6,6 +6,8 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,21 +22,18 @@ public class TransactionReader {
     
     /**
      * Constructor
-     * @param customer customer
      * @param store store instance
      * @param filename transaction file
      */
-    public TransactionReader(Customer customer, Store store, String filename){
-        this.customer = customer;
-        this.transaction = new Transaction();
+    public TransactionReader(Store store, String filename){
         loadFile(filename);
     }
     
     /**
-     * @return get the object instance of the transaction
+     * @return get the iterator of the transactions
      */
-    public Transaction getTransaction(){
-        return this.transaction;
+    public Iterator getTransactionIterator(){
+        return this.transactions.iterator();
     }
 
     /**
@@ -63,7 +62,7 @@ public class TransactionReader {
      * extract the item or payment
      * @param line line string
      */
-    private void extractItemOrPayment(String line) {
+    private void extractItemOrPayment(Transaction transaction, String line) {
         // before the last line are items
         String itemRegex = "(?i)Item:*";
 
@@ -91,11 +90,11 @@ public class TransactionReader {
             TransactionItem itemToAdd;
             if (st.countTokens() == 1) {
                 itemToAdd = new TransactionItem(st.nextToken());
-                this.transaction.addItem(itemToAdd);
+                transaction.addItem(itemToAdd);
             } else if (st.countTokens() == 2) {
                 itemToAdd = new TransactionItem(st.nextToken());
                 itemToAdd.setQuantity(Integer.parseInt(st.nextToken()));
-                this.transaction.addItem(itemToAdd);
+                transaction.addItem(itemToAdd);
             } else {
                 System.out.println("Invalid item input");
             }
@@ -114,15 +113,15 @@ public class TransactionReader {
                 // the parameter should be provided, i.e. how much cash or card#
                 if (paymentType.matches("(?i)cash*")) {
                     param = param.replaceAll("\\$", "");
-                    this.transaction.setPayment(
+                    transaction.setPayment(
                             PaymentFactory.PaymentType.PAYMENT_CASH, param);
                 }else if (paymentType.matches("(?i)check*")) {
                     // actually parameter is not needed for check payment
-                    this.transaction.setPayment(
+                    transaction.setPayment(
                             PaymentFactory.PaymentType.PAYMENT_CHECK, param);
                 }
                 else if (paymentType.matches("(?i)credit*")) {
-                    this.transaction.setPayment(
+                    transaction.setPayment(
                             PaymentFactory.PaymentType.PAYMENT_CREDIT_CARD, param);
                 }
             }
@@ -142,15 +141,26 @@ public class TransactionReader {
             file = new FileReader(fileName);
             BufferedReader reader = new BufferedReader(file);
             
-            // first line, customer name
-            String line = reader.readLine();
-            String customerName = extractCustomer(line);
+            String line;
             
-            this.customer.setName(customerName);
-            
-            // the rest of the file
             while ((line = reader.readLine()) != null) {
-                extractItemOrPayment(line);
+            
+                // first line, customer name
+                String customerName = extractCustomer(line);
+                Customer customer = new Customer();
+                customer.setName(customerName);
+                Transaction trans = new Transaction(customer);
+                this.transactions.add(trans);
+
+                while((line = reader.readLine()) != null){
+                    line = line.trim();
+                    if(line.isEmpty()){
+                        // next transaction
+                        break;
+                    }
+                    // the rest of the file
+                    extractItemOrPayment(trans, line);
+                }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -165,7 +175,5 @@ public class TransactionReader {
         }
     }
     
-    private final Transaction transaction;
-    
-    private final Customer customer;
+    private final ArrayList<Transaction> transactions = new ArrayList<>();
 }

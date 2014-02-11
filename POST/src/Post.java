@@ -23,11 +23,8 @@ public class Post {
         // set up the post
         manager.setupPost();
         
-        // here comes a customer
-        Customer customer = new Customer();
-        
-        // buy
-        customer.doTransaction(store);
+        // receive transactions from file
+        store.receiveTransaction();
         
         // close
         manager.closeStore();

@@ -23,16 +23,20 @@ public class Cashier {
      */
     public Cashier(Store store) {
         this.store = store;
+        
+        //print the store name
+        System.out.println(store.getName());
+        System.out.println();
     }
     
     /**
      * output the invoice
-     * @param customer customer object
      * @param transaction transaction object
      */
-    public void printInvoice(Customer customer, Transaction transaction){
-        System.out.println(store.getName());
-        System.out.println();
+    public void printInvoice(Transaction transaction){
+        
+        Customer customer = transaction.getCustomer();
+        
         System.out.println(customer.getName() + getDateTime());
         
         float total = 0;
@@ -57,6 +61,8 @@ public class Cashier {
         // print the result
         IPayment payment = transaction.getPayment();
         payment.printResult(total);
+        
+        System.out.println();
     }
     
     //private String 

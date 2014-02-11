@@ -39,13 +39,5 @@ public class Customer {
         return "transaction.txt";
     }
     
-    /**
-     * buy the items in a particular store
-     * @param store the specific store instance
-     */
-    public void doTransaction(Store store) {
-        store.receiveTransaction(this);
-    }
-    
     private String name;
 }

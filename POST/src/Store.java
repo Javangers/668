@@ -1,6 +1,4 @@
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Iterator;
 
@@ -67,18 +65,10 @@ public class Store {
     
     /**
      * receive a transaction 
+     * @param trans
      */
-    public void receiveTransaction(){
-        TransactionReader transReader = new TransactionReader(this, 
-                "transaction.txt");
-        
-        Iterator<Transaction> it = transReader.getTransactionIterator();
-        
-        while(it.hasNext()) {
-            Transaction trans = it.next();
-            // calculate the total and print the invoice
-            this.cashier.printInvoice(trans);
-        }
+    public void receiveTransaction(Transaction trans){
+        this.cashier.printInvoice(trans);
     }
     
     /**

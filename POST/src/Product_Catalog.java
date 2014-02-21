@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -41,6 +42,42 @@ public class Product_Catalog {
         }else{
             return item.getPrice();
         }
+    }
+    
+    /**
+     * @param upc
+     * @return item description
+     * if not in stock, return 0
+     */
+    public String getItemDescription(String upc) {
+        Product_Specification item = (Product_Specification)this.catalog.get(upc);
+        if(item == null){
+            return "";
+        }else{
+            return item.getDescription();
+        }
+    }
+    
+    /**
+     * @return the full list of the catalogs
+     */
+    public ArrayList<Product_Specification> createList() {
+        return new ArrayList<>(this.catalog.values());
+    }
+    
+    /**
+     * @return size of the catalog
+     */
+    public int getNumProducts() {
+        return this.catalog.values().size();
+    }
+    
+    /**
+     * @param index
+     * @return 
+     */
+    public Product_Specification getProductByID(int index) {
+        return (new ArrayList<Product_Specification>(this.catalog.values())).get(index);
     }
 
     /**

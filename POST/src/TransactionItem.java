@@ -22,6 +22,16 @@ public class TransactionItem {
     }
     
     /**
+     * Constructor with the upc of the item
+     * @param upc 
+     * @param quantity 
+     */
+    public TransactionItem(String upc, int quantity) {
+        this.Upc = upc;
+        this.quantity = quantity;
+    }
+    
+    /**
      * @return upc
      */
     public String getUpc() {

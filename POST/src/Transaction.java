@@ -49,6 +49,13 @@ public class Transaction {
     }
     
     /**
+     * Clear items
+     */
+    public void clearItems(){
+        this.items.clear();
+    }
+    
+    /**
      * get the number of different items
      * not the total quantity
      * @return size of the items array list
@@ -64,6 +71,15 @@ public class Transaction {
      */
     public void setPayment(PaymentFactory.PaymentType type, String param){
         this.payment = PaymentFactory.createPayment(type, param);
+    }
+    
+    /**
+     * set the payment type
+     * @param type payment type string
+     * @param param parameter for creating the payment
+     */
+    public void setPaymentByString(String type, String param){
+        this.payment = PaymentFactory.createPaymentByString(type, param);
     }
     
     /**

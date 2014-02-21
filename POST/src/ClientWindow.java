@@ -8,6 +8,8 @@
 
 import java.net.MalformedURLException;
 import java.rmi.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,6 +26,8 @@ public final class ClientWindow extends javax.swing.JFrame {
     
     float totalAmount = 0;
     
+    Map<String,Integer> transactions = new HashMap<>();
+    
     /**
      * Creates new form ClientWindow
      * @throws java.rmi.NotBoundException
@@ -34,6 +38,7 @@ public final class ClientWindow extends javax.swing.JFrame {
         
         // Initilize the RMI client and try to connect the server
         rmiInterface = (IRMIInterface)Naming.lookup("//localhost/RmiServer");
+        
         initComponents();
         
         if(rmiInterface != null){
@@ -80,6 +85,7 @@ public final class ClientWindow extends javax.swing.JFrame {
         }
         totalAmount = 0;
         this.labelTotalAmount.setText("0.0");
+        this.transactions.clear();
     }
 
     /**
@@ -371,13 +377,21 @@ public final class ClientWindow extends javax.swing.JFrame {
             String quantity =  (String) comboQuantity.getSelectedItem();
             
             float price = this.rmiInterface.getPriceByUpc(upc);
+            String desc = this.rmiInterface.getDescriptionByUpc(upc);
             float total = price * Float.parseFloat(quantity);
             
             DefaultTableModel model = (DefaultTableModel) tableInvoices.getModel();
-            model.addRow(new Object[]{upc, quantity, Float.toString(price), Float.toString(total)});
+            model.addRow(new Object[]{desc, quantity, Float.toString(price), Float.toString(total)});
             
             totalAmount += total;
             this.labelTotalAmount.setText("$"+Float.toString(totalAmount));
+            
+            if(this.transactions.get(upc) == null){
+                this.transactions.put(upc,Integer.parseInt(quantity));
+            }else{
+                Integer quat = (Integer)this.transactions.get(upc);
+                this.transactions.put(upc,Integer.parseInt(quantity) + quat);
+            }
         } catch (RemoteException ex) {
             Logger.getLogger(ClientWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -417,18 +431,15 @@ public final class ClientWindow extends javax.swing.JFrame {
     private String itemsSerialization() {
         
         String ret = "";
-        DefaultTableModel model = (DefaultTableModel)tableInvoices.getModel(); 
-        int rows = model.getRowCount(); 
-        for(int i = rows - 1; i >=0; i--)
-        {
-           String upc = model.getValueAt(i, 0).toString();
-           String quantity = model.getValueAt(i, 1).toString();
-           ret += upc;
-           ret += " ";
-           ret += quantity;
-           if(i != 0){
-               ret += ",";
-           }
+       
+        for (Map.Entry<String, Integer> entry : this.transactions.entrySet()) {
+            String upc = entry.getKey();
+            String quantity = entry.getValue().toString();
+
+            ret += upc;
+            ret += " ";
+            ret += quantity;
+            ret += ",";
         }
         
         return ret;
